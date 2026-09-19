@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive Simulator and Comparative Performance Analysis for Disk Scheduling Algorithms: FCFS, SSTF, and SCAN with live animations, trajectory graphs, and step-by-step calculations.">
+  <meta name="author" content="Akshat Joshi">
+  <title>Disk Scheduling Algorithms Simulator | FCFS, SSTF & SCAN Analysis</title>
+
+  <!-- Google Fonts: Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- Top Header with Student Info Badge -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="title-group">
+        <h1>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="3"></circle>
+            <line x1="12" y1="2" x2="12" y2="4"></line>
+            <line x1="12" y1="20" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="4" y2="12"></line>
+            <line x1="20" y1="12" x2="22" y2="12"></line>
+          </svg>
+          Disk Scheduling Simulator &amp; Analysis
+        </h1>
+        <p>Unit VI: Storage Management • Operating Systems Lab Project</p>
+      </div>
+
+      <div class="student-badge-card">
+        <div class="student-avatar">AJ</div>
+        <div class="student-info">
+          <h4>Akshat Joshi</h4>
+          <span>Storage Management • Lab Deliverable</span>
+        </div>
+        <button id="exportReportBtn" class="btn-secondary" style="margin-left: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print Report
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- Configuration & Parameters Panel -->
+    <section class="glass-panel" aria-label="Disk Configuration">
+      <h2 class="panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Disk Parameters &amp; Request Sequence Configuration
+      </h2>
+
+      <div class="config-grid">
+        <div class="input-group">
+          <label for="requestsInput">Request Queue Sequence (Cylinder #s)</label>
+          <input type="text" id="requestsInput" class="input-control" value="98, 183, 37, 122, 14, 124, 65, 67" placeholder="e.g. 98, 183, 37, 122, 14, 124, 65, 67">
+        </div>
+
+        <div class="input-group">
+          <label for="initialHeadInput">Initial Head Position</label>
+          <input type="number" id="initialHeadInput" class="input-control" value="53" min="0" max="199">
+        </div>
+
+        <div class="input-group">
+          <label for="maxCylinderInput">Max Cylinder (0..N)</label>
+          <input type="number" id="maxCylinderInput" class="input-control" value="199" min="10" max="999">
+        </div>
+
+        <div class="input-group">
+          <label for="directionSelect">Initial Direction</label>
+          <select id="directionSelect" class="input-control">
+            <option value="right" selected>Right / High (Towards Max)</option>
+            <option value="left">Left / Low (Towards 0)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="seekTimeInput">Seek Time (ms/track)</label>
+          <input type="number" id="seekTimeInput" class="input-control" value="5" min="0.1" step="0.5">
+        </div>
+
+        <div>
+          <button id="runBtn" class="btn-primary" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Run Simulation
+          </button>
+        </div>
+      </div>
+
+      <!-- Presets and quick actions -->
+      <div class="preset-bar">
+        <span class="preset-label">Presets:</span>
+        <button type="button" class="preset-btn active" data-preset="textbook">Silberschatz Benchmark</button>
+        <button type="button" class="preset-btn" data-preset="clustering">Clustered Load</button>
+        <button type="button" class="preset-btn" data-preset="pingpong">Ping-Pong Extremes</button>
+        <button type="button" class="preset-btn" data-preset="sequential">Sequential Sweep</button>
+        <button type="button" id="randomGenBtn" class="preset-btn" style="margin-left: auto;">
+          🎲 Generate Random
+        </button>
+      </div>
+    </section>
+
+    <!-- Algorithm Selection Tabs & Overview -->
+    <section class="glass-panel" aria-label="Algorithm Selection">
+      <div class="algorithm-nav-container">
+        <div class="alg-tabs-list">
+          <button type="button" class="alg-tab active" data-alg="FCFS">
+            <span>FCFS</span>
+            <span class="alg-tag core">Core</span>
+          </button>
+          <button type="button" class="alg-tab" data-alg="SSTF">
+            <span>SSTF</span>
+            <span class="alg-tag core">Core</span>
+          </button>
+          <button type="button" class="alg-tab" data-alg="SCAN">
+            <span>SCAN</span>
+            <span class="alg-tag core">Core</span>
+          </button>
+          <button type="button" class="alg-tab extended-alg" data-alg="CSCAN">
+            <span>C-SCAN</span>
+            <span class="alg-tag ext">Ext</span>
+          </button>
+          <button type="button" class="alg-tab extended-alg" data-alg="LOOK">
+            <span>LOOK</span>
+            <span class="alg-tag ext">Ext</span>
+          </button>
+          <button type="button" class="alg-tab extended-alg" data-alg="CLOOK">
+            <span>C-LOOK</span>
+            <span class="alg-tag ext">Ext</span>
+          </button>
+        </div>
+
+        <label class="toggle-switch-label">
+          <input type="checkbox" id="toggleExtendedAlgorithms" checked>
+          <span>Include Extended Algorithms (C-SCAN, LOOK, C-LOOK)</span>
+        </label>
+      </div>
+
+      <!-- Quick Metrics Cards -->
+      <div style="margin-top: 20px;">
+        <div style="margin-bottom: 14px;">
+          <h3 id="activeAlgTitle" style="font-size: 1.25rem; font-weight: 700; color: var(--accent-cyan);">First-Come, First-Served (FCFS)</h3>
+          <p id="activeAlgDesc" style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">Services I/O requests strictly in order of arrival.</p>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-card thm">
+            <span class="metric-label">Total Head Movement (THM)</span>
+            <span id="metricTHM" class="metric-value">640 cylinders</span>
+          </div>
+          <div class="metric-card asl">
+            <span class="metric-label">Average Seek Length (ASL)</span>
+            <span id="metricASL" class="metric-value">80.00 tracks/req</span>
+          </div>
+          <div class="metric-card time">
+            <span class="metric-label">Estimated Total Seek Time</span>
+            <span id="metricTime" class="metric-value">3200.0 ms</span>
+          </div>
+          <div class="metric-card eff">
+            <span class="metric-label">Performance vs FCFS</span>
+            <span id="metricEfficiency" class="metric-value neutral">Baseline (0%)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Physical Platter Animation & Linear Track Simulator -->
+    <section class="glass-panel" aria-label="Physical Hard Disk Simulation">
+      <h2 class="panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10 8 16 12 10 16 10 8"></polygon>
+        </svg>
+        Live Disk Platter &amp; Track Seek Simulation
+      </h2>
+
+      <div class="simulation-split">
+        <!-- Mechanical Platter & Arm Canvas -->
+        <div class="disk-canvas-wrapper">
+          <canvas id="diskCanvas"></canvas>
+        </div>
+
+        <!-- Linear Track Ruler & Playback Bar -->
+        <div class="track-ruler-section">
+          <div>
+            <h3 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 6px;">Linear Cylinder Track Scale (0 to Max)</h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary);">
+              Watch the read/write head seek across the platter tracks. Serviced request pins turn <span style="color: var(--accent-emerald); font-weight: 600;">green</span>.
+            </p>
+          </div>
+
+          <div class="track-ruler-container" id="trackRulerContainer">
+            <!-- Dynamic Ruler and Pins injected by JS -->
+          </div>
+
+          <!-- Playback Controller -->
+          <div class="playback-bar">
+            <div class="playback-controls">
+              <button id="resetStepBtn" class="btn-ctrl" title="Reset Simulation">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+              </button>
+
+              <button id="prevStepBtn" class="btn-ctrl" title="Previous Step">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                  <line x1="5" y1="19" x2="5" y2="5"></line>
+                </svg>
+              </button>
+
+              <button id="playPauseBtn" class="btn-ctrl play-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>Play Simulation</span>
+              </button>
+
+              <button id="nextStepBtn" class="btn-ctrl" title="Next Step">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                  <line x1="19" y1="5" x2="19" y2="19"></line>
+                </svg>
+              </button>
+            </div>
+
+            <span id="stepProgressText" class="step-tracker-text">Step 0 of 8</span>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="speedSelect" style="font-size: 0.8rem; color: var(--text-muted);">Speed:</label>
+              <select id="speedSelect" class="input-control" style="padding: 4px 8px; width: auto; font-size: 0.82rem;">
+                <option value="0.5">0.5x</option>
+                <option value="1.0" selected>1.0x</option>
+                <option value="2.0">2.0x</option>
+                <option value="3.0">3.0x</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Analytics & Charts Section -->
+    <section class="glass-panel" aria-label="Visual Graphs">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+        <h2 class="panel-title" style="margin-bottom: 0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          Trajectory &amp; Comparative Analysis Graphs
+        </h2>
+
+        <label class="toggle-switch-label">
+          <input type="checkbox" id="trajectoryOverlayToggle">
+          <span>Overlay All Algorithms on Trajectory Graph</span>
+        </label>
+      </div>
+
+      <div class="charts-grid">
+        <!-- Textbook Trajectory Line Chart -->
+        <div class="chart-card">
+          <h3 style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 10px;">
+            OS Textbook Cylinder Trajectory (Arm Path)
+          </h3>
+          <div class="chart-canvas-box">
+            <canvas id="trajectoryChartCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Comparative Metrics Bar Chart -->
+        <div class="chart-card">
+          <h3 style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 10px;">
+            Comparative Head Movement &amp; Seek Length
+          </h3>
+          <div class="chart-canvas-box">
+            <canvas id="comparisonChartCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step-by-Step Mathematical Calculation Log -->
+    <section class="glass-panel" aria-label="Step-by-Step Calculations">
+      <h2 class="panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+          <line x1="8" y1="6" x2="16" y2="6"></line>
+          <line x1="16" y1="14" x2="16" y2="18"></line>
+          <path d="M16 10h.01"></path>
+          <path d="M12 10h.01"></path>
+          <path d="M8 10h.01"></path>
+          <path d="M12 14h.01"></path>
+          <path d="M8 14h.01"></path>
+          <path d="M12 18h.01"></path>
+          <path d="M8 18h.01"></path>
+        </svg>
+        Step-by-Step Head-Movement Calculations
+      </h2>
+      <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 14px;">
+        Head Movement formula: <code style="color: var(--accent-cyan);">Seek Distance = |Target Cylinder - Current Cylinder|</code>. Active step during playback is highlighted in real time.
+      </p>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Step #</th>
+              <th>From Track</th>
+              <th>To Track</th>
+              <th>Formula</th>
+              <th>Seek Distance (|Δ|)</th>
+              <th>Cumulative Movement</th>
+              <th>Operational Rationale</th>
+            </tr>
+          </thead>
+          <tbody id="calculationTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Comparative Performance Matrix -->
+    <section class="glass-panel" aria-label="Comparative Matrix">
+      <h2 class="panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        Comparative Results &amp; Performance Analysis Matrix
+      </h2>
+      <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 14px;">
+        Direct side-by-side benchmark comparing Total Head Movement, Average Seek Length, Starvation Vulnerability, and Algorithmic Complexity.
+      </p>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Total Head Movement (THM)</th>
+              <th>Average Seek Length</th>
+              <th>Est. Seek Time (@5ms)</th>
+              <th>Efficiency vs FCFS</th>
+              <th>Service Order</th>
+              <th>Starvation Risk</th>
+              <th>Complexity</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Theory, Formulas & Academic References Hub -->
+    <section class="glass-panel" aria-label="Theory and Academic References">
+      <h2 class="panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        Conceptual Foundations &amp; Academic Reference Hub
+      </h2>
+
+      <div class="theory-grid">
+        <!-- FCFS Card -->
+        <div class="theory-card">
+          <h3>First-Come, First-Served (FCFS)</h3>
+          <p>
+            The simplest disk scheduling algorithm. The I/O request queue is serviced strictly in the order of request arrival (FIFO).
+          </p>
+          <div class="formula-box">
+            THM = &sum;<sub>i=1</sub><sup>N</sup> |C<sub>i</sub> - C<sub>i-1</sub>|
+          </div>
+          <ul class="pros-cons-list">
+            <li class="pro">✔ Completely fair; zero starvation.</li>
+            <li class="pro">✔ Extremely simple O(N) implementation.</li>
+            <li class="con">✖ High average seek distance; wild arm oscillations.</li>
+          </ul>
+        </div>
+
+        <!-- SSTF Card -->
+        <div class="theory-card">
+          <h3>Shortest Seek Time First (SSTF)</h3>
+          <p>
+            Greedily selects the pending request that is closest to the current head position, minimizing immediate mechanical seek travel.
+          </p>
+          <div class="formula-box">
+            Next = argmin<sub>c &isin; Q</sub> |c - C<sub>head</sub>|
+          </div>
+          <ul class="pros-cons-list">
+            <li class="pro">✔ Substantially reduces total head movement.</li>
+            <li class="pro">✔ High throughput for localized requests.</li>
+            <li class="con">✖ Starvation risk for tracks far from current cluster.</li>
+          </ul>
+        </div>
+
+        <!-- SCAN Card -->
+        <div class="theory-card">
+          <h3>SCAN (Elevator Algorithm)</h3>
+          <p>
+            The disk arm sweeps continuously across the platter in one direction, servicing requests until reaching the boundary cylinder, then reverses.
+          </p>
+          <div class="formula-box">
+            THM = (Max - Head) + (Max - Min<sub>left</sub>)
+          </div>
+          <ul class="pros-cons-list">
+            <li class="pro">✔ Eliminates starvation through uniform sweeps.</li>
+            <li class="pro">✔ Excellent balance between throughput and fairness.</li>
+            <li class="con">✖ Reaches disk boundary even if no requests are there.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Reference Citation List -->
+      <div class="reference-list">
+        <strong style="color: var(--text-primary); font-size: 0.9rem;">Authentic Academic References (OS Syllabus):</strong>
+        <ol>
+          <li>
+            <strong>Silberschatz, A., Galvin, P. B., &amp; Gagne, G. (2018).</strong> <em>Operating System Concepts</em> (10th Edition). Chapter 11: Mass-Storage Structure (Disk Scheduling, FCFS, SSTF, SCAN, C-SCAN). John Wiley &amp; Sons.
+          </li>
+          <li>
+            <strong>Tanenbaum, A. S., &amp; Bos, H. (2015).</strong> <em>Modern Operating Systems</em> (4th Edition). Chapter 5: Input/Output (Disk Arm Scheduling Algorithms). Pearson.
+          </li>
+          <li>
+            <strong>Stallings, W. (2018).</strong> <em>Operating Systems: Internals and Design Principles</em> (9th Edition). Chapter 11: I/O Management and Disk Scheduling. Pearson.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Application Logic Module -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
