@@ -3,6 +3,7 @@
 **Assigned Student:** Akshat Joshi  
 **Course Module:** Unit VI: Storage Management  
 **Project Title:** Disk Scheduling Algorithms: FCFS, SSTF and SCAN Performance Analysis  
+**GitHub Repository:** [https://github.com/MRIDULsinghRAWAT/Disk-scheduling-](https://github.com/MRIDULsinghRAWAT/Disk-scheduling-)  
 
 ---
 

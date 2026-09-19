@@ -183,6 +183,7 @@ def build_pdf():
         [Paragraph("<b>Assigned Student:</b>", body_style), Paragraph("<b>Akshat Joshi</b>", body_style)],
         [Paragraph("<b>Course Curriculum:</b>", body_style), Paragraph("Operating Systems (Unit VI: Storage Management)", body_style)],
         [Paragraph("<b>Project Category:</b>", body_style), Paragraph("Special Direct Reading Project (25 Points Allocation)", body_style)],
+        [Paragraph("<b>GitHub Repository:</b>", body_style), Paragraph("<font color='#0284c7'><b>https://github.com/MRIDULsinghRAWAT/Disk-scheduling-</b></font>", body_style)],
         [Paragraph("<b>Primary Algorithms:</b>", body_style), Paragraph("FCFS (First-Come, First-Served), SSTF (Shortest Seek Time First), SCAN (Elevator)", body_style)],
         [Paragraph("<b>Extended Algorithms:</b>", body_style), Paragraph("C-SCAN (Circular SCAN), LOOK, C-LOOK", body_style)],
         [Paragraph("<b>Theoretical Benchmark:</b>", body_style), Paragraph("Silberschatz et al. (10th Ed.) Benchmark: [98, 183, 37, 122, 14, 124, 65, 67] at Head 53", body_style)],
@@ -243,6 +244,7 @@ def build_pdf():
     story.append(Paragraph("• <b>Step-by-Step Calculation Engine:</b> Complete mathematical breakdowns showing absolute seek distances (|C<sub>i</sub> - C<sub>i-1</sub>|), cumulative Total Head Movement (THM), and operational rationale.", bullet_style))
     story.append(Paragraph("• <b>Multi-Dimensional Graphical Visualizations:</b> Silberschatz 2D Trajectory line plots (Cylinder vs Step Order) and comparative bar charts.", bullet_style))
     story.append(Paragraph("• <b>Comparative Performance Matrix:</b> Comprehensive evaluation table comparing THM, Average Seek Length (ASL), seek time, efficiency vs baseline FCFS, starvation risk, and algorithmic time complexity.", bullet_style))
+    story.append(Paragraph("• <b>Source Code Repository:</b> Hosted publicly on GitHub at <font color='#0284c7'><b>https://github.com/MRIDULsinghRAWAT/Disk-scheduling-</b></font>.", bullet_style))
 
     story.append(Spacer(1, 6))
     story.append(Paragraph("2. Hard Disk Physical Mechanics & Mathematical Formulations", h1_style))
